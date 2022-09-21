@@ -1,3 +1,7 @@
+using AccountsManager.DataModels.V1.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace AccountsManager
 {
     public class Program
@@ -12,6 +16,12 @@ namespace AccountsManager
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContextPool<AppDBContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer"));
+            });
+
 
             var app = builder.Build();
 
