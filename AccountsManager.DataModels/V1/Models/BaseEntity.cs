@@ -11,6 +11,7 @@ namespace AccountsManager.DataModels.V1.Models
         public Guid Id { get; set; } = new Guid();
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime? DeletedOn { get; set; }
     }
 }

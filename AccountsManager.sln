@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsManager.DataModels"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsManager.Common", "AccountsManager.Common\AccountsManager.Common.csproj", "{0EB86547-33D2-4883-96D7-41B98FCE15AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountsManager.DataAccess", "AccountsManager.DataAccess\AccountsManager.DataAccess.csproj", "{1D275BAA-831D-4CDF-96BB-51B14E5715A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsManager.DataAccess", "AccountsManager.DataAccess\AccountsManager.DataAccess.csproj", "{1D275BAA-831D-4CDF-96BB-51B14E5715A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountsManager.Application", "AccountsManager.Application\AccountsManager.Application.csproj", "{F9877D24-F8C3-44D3-9055-03FC579F7ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsManager.Application", "AccountsManager.Application\AccountsManager.Application.csproj", "{F9877D24-F8C3-44D3-9055-03FC579F7ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountsManager.ApplicationModels", "AccountsManager.ApplicationModels\AccountsManager.ApplicationModels.csproj", "{23A6F7F2-7AC6-4DBE-B3E9-89A549CC013B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F9877D24-F8C3-44D3-9055-03FC579F7ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9877D24-F8C3-44D3-9055-03FC579F7ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9877D24-F8C3-44D3-9055-03FC579F7ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23A6F7F2-7AC6-4DBE-B3E9-89A549CC013B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A6F7F2-7AC6-4DBE-B3E9-89A549CC013B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A6F7F2-7AC6-4DBE-B3E9-89A549CC013B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A6F7F2-7AC6-4DBE-B3E9-89A549CC013B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

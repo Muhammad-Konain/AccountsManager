@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AccountsManager.ApplicationModels\AccountsManager.ApplicationModels.csproj" />
     <ProjectReference Include="..\AccountsManager.DataAccess\AccountsManager.DataAccess.csproj" />
+    <ProjectReference Include="..\AccountsManager.DataModels\AccountsManager.DataModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="V1\Contracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

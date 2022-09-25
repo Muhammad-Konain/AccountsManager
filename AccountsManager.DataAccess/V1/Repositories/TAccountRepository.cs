@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AccountsManager.DataAccess.V1.Repositories
 {
-    public class TAccountRepository : BaseRepository<TAccount>, ITAccountRepository
+    public sealed class TAccountRepository : BaseRepository<TAccount>, ITAccountRepository
     {
         public TAccountRepository(AppDBContext context) : base(context)
         {

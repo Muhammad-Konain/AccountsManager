@@ -15,24 +15,40 @@ namespace AccountsManager.DataAccess.V1.Repositories
         {
             _context = context;
         }
-        public virtual T Create(T entity)
+        public virtual async Task<T> Create(T entity)
         {
-            _context.Set<T>().Add(entity);
+            entity.CreatedOn = DateTime.UtcNow;
+
+            await _context.Set<T>()
+                          .AddAsync(entity);
+
             return entity;
         }
         public virtual T Update(T entity)
         {
+            entity.LastModifiedOn = DateTime.UtcNow;
+
+            _context.Set<T>().Update(entity);
+            return entity;
+        }
+        public virtual T Delete(T entity)
+        {
+            entity.IsActive = false;
+            entity.DeletedOn = DateTime.UtcNow;
+
             _context.Set<T>().Update(entity);
             return entity;
         }
         public virtual IQueryable<T> GetAll()
         {
-            return _context.Set<T>().AsQueryable();
+            return _context.Set<T>()
+                           .Where(w=>w.IsActive)
+                           .AsQueryable();
         }
         public virtual IQueryable<T> GetById(Guid entityID)
         {
             return _context.Set<T>()
-                           .Where(w => w.Id == entityID)
+                           .Where(w => w.Id == entityID && w.IsActive)
                            .AsQueryable();
         }
         public async Task<int> Save()

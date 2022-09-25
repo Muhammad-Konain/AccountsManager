@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace AccountsManager.DataAccess.V1.Contracts
 {
-    internal interface IBaseRepository<T>
+    public interface IBaseRepository<T>
     {
-        T Create(T entity);
+        Task<T> Create(T entity);
         T Update(T entity);
+        T Delete(T entity);
         IQueryable<T> GetAll();
         IQueryable<T> GetById(Guid entityId);
     }
