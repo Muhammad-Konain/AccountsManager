@@ -8,7 +8,7 @@ namespace AccountsManager.DataModels.V1.Models
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         public bool IsActive { get; set; } = true;

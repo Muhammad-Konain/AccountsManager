@@ -12,7 +12,7 @@ namespace AccountsManager.ApplicationModels.V1.Exceptions
         {
         }
 
-        public EntityNotFoundExcetption(Guid entityId, string message):base($"No entity found having id: {entityId}")
+        public EntityNotFoundExcetption(Guid entityId):base($"No entity found having id: {entityId}")
         {
 
         }

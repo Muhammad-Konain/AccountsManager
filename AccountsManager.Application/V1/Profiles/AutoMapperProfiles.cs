@@ -10,6 +10,8 @@ namespace AccountsManager.Application.V1.Profiles
         {
             CreateMap<TAccountCreateDTO, TAccount>();
             CreateMap<TAccount, TAccountReadDTO>();
+
+            CreateMap<TAccountUpdateDTO, TAccount>();
         }
     }
 }

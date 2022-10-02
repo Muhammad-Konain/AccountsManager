@@ -2,6 +2,7 @@ using AccountsManager.Application.V1.Profiles;
 using AccountsManager.Application.V1.Registery;
 using AccountsManager.DataAccess.V1.Registery;
 using AccountsManager.DataModels.V1.Data;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountsManager
@@ -22,7 +23,7 @@ namespace AccountsManager
             builder.Services.RegisterDataRepositories();
             builder.Services.RegisterBusinessServices();
             builder.Services.RegisterHelpers();
-
+            
             builder.Services.AddDbContextPool<AppDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer"));

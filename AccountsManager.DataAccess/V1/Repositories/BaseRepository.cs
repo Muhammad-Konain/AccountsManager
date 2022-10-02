@@ -18,6 +18,7 @@ namespace AccountsManager.DataAccess.V1.Repositories
         public virtual async Task<T> Create(T entity)
         {
             entity.CreatedOn = DateTime.UtcNow;
+            entity.LastModifiedOn = DateTime.UtcNow;
 
             await _context.Set<T>()
                           .AddAsync(entity);
@@ -42,14 +43,12 @@ namespace AccountsManager.DataAccess.V1.Repositories
         public virtual IQueryable<T> GetAll()
         {
             return _context.Set<T>()
-                           .Where(w=>w.IsActive)
-                           .AsQueryable();
+                           .Where(w => w.IsActive);
         }
         public virtual IQueryable<T> GetById(Guid entityID)
         {
             return _context.Set<T>()
-                           .Where(w => w.Id == entityID && w.IsActive)
-                           .AsQueryable();
+                           .Where(w => w.Id == entityID && w.IsActive);
         }
         public async Task<int> Save()
         {

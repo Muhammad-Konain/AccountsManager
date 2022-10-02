@@ -15,5 +15,8 @@ namespace AccountsManager.Application.V1.Helpers
         {
             return _mapper.Map<TDestination>(entity);
         }
+        public TDestination MapEntiyInto<TSource, TDestination>(TSource source, TDestination destination){
+            return _mapper.Map(source, destination);
+        }
     }
 }
