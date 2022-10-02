@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AccountsManager.DataModels\AccountsManager.DataModels.csproj" />
+    <ProjectReference Include="..\AccountsManager.Application\AccountsManager.Application.csproj" />
   </ItemGroup>
 
 </Project>
