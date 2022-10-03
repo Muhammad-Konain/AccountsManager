@@ -1,3 +1,4 @@
+using AccountsManager.API.Filters;
 using AccountsManager.Application.V1.Profiles;
 using AccountsManager.Application.V1.Registery;
 using AccountsManager.DataAccess.V1.Registery;
@@ -15,7 +16,10 @@ namespace AccountsManager
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(config =>
+            {
+                config.Filters.Add(new ExceptionHandlingFilter());
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
