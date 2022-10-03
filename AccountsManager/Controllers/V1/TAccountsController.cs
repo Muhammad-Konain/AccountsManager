@@ -20,36 +20,36 @@ namespace AccountsManager.API.Controllers.V1
         public async Task<IActionResult> CreateTAccount(TAccountCreateDTO accountCreateDTO)
         {
             var created = await _accountService.CreateAccount(accountCreateDTO);
-            return Ok(created);
+            return CreatedAtRoute(nameof(GetByID), new { id = created.Id }, created);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateTAccount(TAccountUpdateDTO accountCreateDTO)
         {
-            var created = await _accountService.UpdateTAccount(accountCreateDTO);
-            return Ok(created);
+            var updated = await _accountService.UpdateTAccount(accountCreateDTO);
+            return Ok(updated);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name= "GetByID")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var created = await _accountService.GetAccountById(id); 
-            return Ok(created);
+            var account = await _accountService.GetAccountById(id); 
+            return Ok(account);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAccounts()
         {
-            var created = await _accountService.GetAllAccounts();
-            return Ok(created);
+            var accounts = await _accountService.GetAllAccounts();
+            return Ok(accounts);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteAccount(Guid id)
         {
-            var restult = await _accountService.DeleteAccount(id);
+            var deletedAccount = await _accountService.DeleteAccount(id);
             
-            if(restult >= 0)
+            if(deletedAccount >= 0)
                 return Ok();
 
             return BadRequest();
