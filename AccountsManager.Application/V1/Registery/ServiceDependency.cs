@@ -21,7 +21,8 @@ namespace AccountsManager.Application.V1.Registery
                 config.AddProfile(new AutoMapperProfiles());
             });
             services.AddScoped<MappingHelper>();
-            //services.addflu(config=>config.RegisterValidatorsFromAssemblyContaining<TAccountCreateDTOValidator>());
+            services.AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<TAccountCreateDTOValidator>());
+               
             return services;
         }
     }
