@@ -9,8 +9,8 @@ namespace AccountsManager.ApplicationModels.V1.Validators
         {
             RuleFor(x => x.Title)
                 .NotNull()
-                .NotEmpty()
-                .Matches("^[a-zA-Z ]+");
+                .NotEmpty();
+                //.Matches("^[a-zA-Z ]+");
 
             RuleFor(x => x.AccountType)
                 .IsInEnum();

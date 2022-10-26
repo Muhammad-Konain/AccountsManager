@@ -44,7 +44,7 @@ namespace AccountsManager.API.Controllers.V1
             return Ok(accounts);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(Guid id)
         {
             var deletedAccount = await _accountService.DeleteAccount(id);

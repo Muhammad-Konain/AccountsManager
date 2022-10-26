@@ -33,7 +33,7 @@ namespace AccountsManager.Application.V1.Services
                                                      .FirstOrDefaultAsync();
             
             if (accountInDB == null)
-                throw new EntityNotFoundExcetption(accountUpdateDTO.Id);
+                throw new EntityNotFoundExcetption(accountUpdateDTO.Id, nameof(TAccount));
 
             _mapper.MapEntiyInto(accountUpdateDTO, accountInDB);
 
@@ -57,7 +57,7 @@ namespace AccountsManager.Application.V1.Services
                                                   .AsNoTrackingWithIdentityResolution()
                                                   .SingleOrDefaultAsync();
             if (account == null)
-                throw new EntityNotFoundExcetption(id);
+                throw new EntityNotFoundExcetption(id, nameof(TAccount));
 
             return _mapper.MapEntity<TAccount, TAccountReadDTO>(account);
         }
