@@ -3,6 +3,8 @@ using AccountsManager.Application.V1.Registery;
 using AccountsManager.DataAccess.V1.Registery;
 using AccountsManager.DataModels.V1.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 namespace AccountsManager
 {
@@ -11,6 +13,7 @@ namespace AccountsManager
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var SQLConnection = builder.Configuration.GetConnectionString("SQLServer");
 
             // Add services to the container.
 
@@ -28,8 +31,15 @@ namespace AccountsManager
             
             builder.Services.AddDbContextPool<AppDBContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer"));
+                options.UseSqlServer(SQLConnection);
             });
+
+            var logger = new LoggerConfiguration()
+                                .ReadFrom
+                                .Configuration(builder.Configuration)
+                                .CreateLogger();
+
+            builder.Host.UseSerilog(logger);
 
             var app = builder.Build();
 
@@ -39,7 +49,7 @@ namespace AccountsManager
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

@@ -9,11 +9,13 @@ namespace AccountsManager.API.Controllers.V1
     [ApiController]
     public class TAccountsController : ControllerBase
     {
-        private ITAccountService _accountService;
+        private readonly ITAccountService _accountService;
+        private readonly ILogger<TAccountsController> _logger;
 
-        public TAccountsController(ITAccountService accountService)
+        public TAccountsController(ITAccountService accountService, ILogger<TAccountsController> logger)
         {
             _accountService = accountService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -33,6 +35,7 @@ namespace AccountsManager.API.Controllers.V1
         [HttpGet("{id}", Name= "GetByID")]
         public async Task<IActionResult> GetByID(Guid id)
         {
+            _logger.LogInformation("logging");
             var account = await _accountService.GetAccountById(id); 
             return Ok(account);
         }
