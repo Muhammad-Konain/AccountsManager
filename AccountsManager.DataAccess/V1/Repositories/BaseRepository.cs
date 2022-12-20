@@ -50,9 +50,5 @@ namespace AccountsManager.DataAccess.V1.Repositories
             return _context.Set<T>()
                            .Where(w => w.Id == entityID && w.IsActive);
         }
-        public async Task<int> Save()
-        {
-            return await _context.SaveChangesAsync();
-        }
     }
 }
