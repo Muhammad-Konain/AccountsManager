@@ -14,6 +14,5 @@ namespace AccountsManager.DataAccess.V1.Contracts
         T Delete(T entity);
         IQueryable<T> GetAll();
         IQueryable<T> GetById(Guid entityId);
-        Task<int> Save();
     }
 }
