@@ -10,6 +10,7 @@ namespace AccountsManager.DataAccess.V1.Core
     public interface IUnitOfWork
     {
         ITAccountRepository AccountRepository { get; }
+        IVoucherRepository VoucherRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

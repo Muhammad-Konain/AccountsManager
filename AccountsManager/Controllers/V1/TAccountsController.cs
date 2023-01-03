@@ -7,7 +7,7 @@ namespace AccountsManager.API.Controllers.V1
 {
     [Route("api/V1/[controller]")]
     [ApiController]
-    public class TAccountsController : ControllerBase
+    public sealed class TAccountsController : ControllerBase
     {
         private ITAccountService _accountService;
 

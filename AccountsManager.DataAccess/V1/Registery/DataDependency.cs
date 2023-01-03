@@ -15,6 +15,7 @@ namespace AccountsManager.DataAccess.V1.Registery
         public static IServiceCollection RegisterDataRepositories(this IServiceCollection services)
         {
             services.AddScoped<ITAccountRepository, TAccountRepository>();
+            services.AddScoped<IVoucherRepository, VoucherRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }

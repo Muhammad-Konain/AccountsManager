@@ -12,11 +12,13 @@ namespace AccountsManager.DataAccess.V1.Core
     {
         private readonly AppDBContext _context;
         public ITAccountRepository AccountRepository { get; init; }
+        public IVoucherRepository VoucherRepository { get; init; }
 
-        public UnitOfWork(AppDBContext context, ITAccountRepository accountRepository)
+        public UnitOfWork(AppDBContext context, ITAccountRepository accountRepository, IVoucherRepository voucherRepository)
         {
-            AccountRepository = accountRepository;
             _context = context;
+            AccountRepository = accountRepository;
+            VoucherRepository = voucherRepository;
         }
         public async Task<int> SaveChangesAsync()
         {

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsManager.ApplicationModels.V1.Validators
+namespace AccountsManager.ApplicationModels.V1.Validators.TAccountValidators
 {
-    public class TAccountUpdateDTOValidator : AbstractValidator<TAccountUpdateDTO>
+    public sealed class TAccountUpdateDTOValidator : AbstractValidator<TAccountUpdateDTO>
     {
         public TAccountUpdateDTOValidator()
         {
