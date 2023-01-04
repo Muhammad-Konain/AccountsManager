@@ -18,7 +18,8 @@ namespace AccountsManager.Application.V1.Profiles
             CreateMap<VoucherCreateDTO, Voucher>();
             CreateMap<Voucher, VoucherReadDTO>();
 
-            CreateMap<TransactionCreateDTO, Transaction>();
+            CreateMap<TransactionDTO, Transaction>();
+            CreateMap<Transaction, TransactionDTO>();
         }
     }
 }

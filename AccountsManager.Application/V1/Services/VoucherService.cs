@@ -18,10 +18,12 @@ namespace AccountsManager.Application.V1.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task CreateVoucher(VoucherCreateDTO voucherCreateDTO)
+        public async Task<VoucherReadDTO> CreateVoucher(VoucherCreateDTO voucherCreateDTO)
         {
             var accounts = voucherCreateDTO.Transactions.Select(s => s.AccountId).ToList();
-            var accountsFound = await _unitOfWork.AccountRepository.Find(a => accounts.Contains(a.Id)).Select(s => s.Id).ToListAsync();
+            var accountsFound = await _unitOfWork.AccountRepository.Find(a => accounts.Contains(a.Id))
+                                                                   .Select(s => s.Id)
+                                                                   .ToListAsync();
 
             if (accounts.Count != accountsFound.Count)
                 throw new EntityNotFoundExcetption(accounts.Except(accountsFound).ToList(), nameof(TAccount));
@@ -30,7 +32,14 @@ namespace AccountsManager.Application.V1.Services
             var debtAmount = voucherCreateDTO.Transactions.Sum(s => s.Debt);
 
             if (creditAmount != debtAmount)
-                throw new InvalidVoucherBalanceException();
+                throw new InvalidVoucherBalanceException(creditAmount, debtAmount);
+
+            var voucher = _mapper.MapEntity<VoucherCreateDTO, Voucher>(voucherCreateDTO);
+            await _unitOfWork.VoucherRepository.CreateAsync(voucher);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.MapEntity<Voucher, VoucherReadDTO>(voucher);
         }
     }
 }

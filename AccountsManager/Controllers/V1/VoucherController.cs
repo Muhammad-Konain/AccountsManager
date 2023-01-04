@@ -18,8 +18,8 @@ namespace AccountsManager.API.Controllers.V1
         [HttpPost]
         public async Task<IActionResult> CreateTAccount(VoucherCreateDTO voucherCreateDTO)
         {
-            await _voucherService.CreateVoucher(voucherCreateDTO);
-            return Ok();
+            var result = await _voucherService.CreateVoucher(voucherCreateDTO);
+            return Ok(result);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace AccountsManager.DataAccess.V1.Core
     {
         ITAccountRepository AccountRepository { get; }
         IVoucherRepository VoucherRepository { get; }
+        ITransactionRepository TransactionRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

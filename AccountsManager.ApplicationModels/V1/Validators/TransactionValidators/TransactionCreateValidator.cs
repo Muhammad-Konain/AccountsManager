@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AccountsManager.ApplicationModels.V1.Validators.TransactionValidators
 {
-    internal class TransactionCreateValidator : AbstractValidator<TransactionCreateDTO>
+    internal class TransactionCreateValidator : AbstractValidator<TransactionDTO>
     {
         public TransactionCreateValidator()
         {

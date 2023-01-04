@@ -1,9 +1,5 @@
-﻿using AccountsManager.Common.V1.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AccountsManager.ApplicationModels.V1.DTOs.TransactionsDTOs;
+using AccountsManager.Common.V1.Enums;
 
 namespace AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs
 {
@@ -13,5 +9,6 @@ namespace AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         public VoucherType VoucherType { get; set; }
+        public List<TransactionDTO> Transactions { get; set; } = new();
     }
 }

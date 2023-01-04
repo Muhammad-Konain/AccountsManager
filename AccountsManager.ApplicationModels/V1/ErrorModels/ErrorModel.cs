@@ -8,6 +8,6 @@ namespace AccountsManager.ApplicationModels.V1.ErrorModels
 {
     public class ErrorModel
     {
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 }

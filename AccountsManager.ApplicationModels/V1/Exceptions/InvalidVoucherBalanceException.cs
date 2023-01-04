@@ -8,9 +8,8 @@ namespace AccountsManager.ApplicationModels.V1.Exceptions
 {
     public class InvalidVoucherBalanceException : Exception
     {
-        public InvalidVoucherBalanceException()
+        public InvalidVoucherBalanceException(decimal credit, decimal debt):base($"Invalid net voucher balance. Credit:{credit}, debt:{debt}")
         {
-
         }
     }
 }

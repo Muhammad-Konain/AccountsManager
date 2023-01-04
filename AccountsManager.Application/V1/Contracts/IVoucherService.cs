@@ -4,6 +4,6 @@ namespace AccountsManager.Application.V1.Contracts
 {
     public interface IVoucherService
     {
-        Task CreateVoucher(VoucherCreateDTO voucherCreateDTO);
+        Task<VoucherReadDTO> CreateVoucher(VoucherCreateDTO voucherCreateDTO);
     }
 }
