@@ -1,19 +1,19 @@
 ﻿using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using FluentValidation;
 
-namespace AccountsManager.ApplicationModels.V1.Validators
+namespace AccountsManager.ApplicationModels.V1.Validators.TAccountValidators
 {
-    public class TAccountCreateDTOValidator : AbstractValidator<TAccountCreateDTO>
+    public sealed class TAccountCreateDTOValidator : AbstractValidator<TAccountCreateDTO>
     {
         public TAccountCreateDTOValidator()
         {
             RuleFor(x => x.Title)
                 .NotNull()
                 .NotEmpty();
-                //.Matches("^[a-zA-Z ]+");
-
+            
             RuleFor(x => x.AccountType)
-                .IsInEnum();
+                .IsInEnum()
+                .WithMessage("Must be a valid account type.");
         }
     }
 }

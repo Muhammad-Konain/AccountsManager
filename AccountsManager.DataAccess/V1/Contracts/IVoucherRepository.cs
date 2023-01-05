@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace AccountsManager.DataAccess.V1.Contracts
 {
-    public interface ITAccountRepository : IBaseRepository<TAccount>
+    public interface IVoucherRepository : IBaseRepository<Voucher>
     {
-        IQueryable<TAccount> GetAccounts(List<Guid> accounts);
     }
 }

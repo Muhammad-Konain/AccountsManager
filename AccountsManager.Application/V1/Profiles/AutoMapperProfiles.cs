@@ -1,4 +1,6 @@
 ﻿using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
+using AccountsManager.ApplicationModels.V1.DTOs.TransactionsDTOs;
+using AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs;
 using AccountsManager.DataModels.V1.Models;
 using AutoMapper;
 
@@ -12,6 +14,12 @@ namespace AccountsManager.Application.V1.Profiles
             CreateMap<TAccount, TAccountReadDTO>();
 
             CreateMap<TAccountUpdateDTO, TAccount>();
+            
+            CreateMap<VoucherCreateDTO, Voucher>();
+            CreateMap<Voucher, VoucherReadDTO>();
+
+            CreateMap<TransactionCreateDTO, Transaction>();
+            CreateMap<Transaction, TransactionReadDTO>();
         }
     }
 }

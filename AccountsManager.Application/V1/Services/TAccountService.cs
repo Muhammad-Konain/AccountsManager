@@ -2,7 +2,6 @@
 using AccountsManager.Application.V1.Helpers;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
-using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,7 @@ namespace AccountsManager.Application.V1.Services
         public async Task<TAccountReadDTO> CreateAccount(TAccountCreateDTO accountCreateDTO)
         {
             var accountModel = _mapper.MapEntity<TAccountCreateDTO, TAccount>(accountCreateDTO);
-            await _unitOfWork.AccountRepository.Create(accountModel);
+            await _unitOfWork.AccountRepository.CreateAsync(accountModel);
             await _unitOfWork.SaveChangesAsync();
             
             return _mapper.MapEntity<TAccount, TAccountReadDTO>(accountModel);

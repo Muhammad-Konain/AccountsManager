@@ -4,6 +4,7 @@ using AccountsManager.DataModels.V1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountsManager.DataModels.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20221230165149_AddedVoucheToTrnasactions")]
+    partial class AddedVoucheToTrnasactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,10 +67,10 @@ namespace AccountsManager.DataModels.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Credit")
+                    b.Property<decimal?>("Credit")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Debt")
+                    b.Property<decimal?>("Debt")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("DeletedOn")
@@ -103,11 +105,6 @@ namespace AccountsManager.DataModels.Migrations
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

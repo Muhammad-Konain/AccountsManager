@@ -16,7 +16,8 @@ namespace AccountsManager.API.Filters
 
             context.Result = context.Exception switch
             {
-                EntityNotFoundExcetption ex => new NotFoundObjectResult(exceptionResult),
+                EntityNotFoundExcetption => new NotFoundObjectResult(exceptionResult),
+                InvalidVoucherBalanceException => new BadRequestObjectResult(exceptionResult),
                 _ => new StatusCodeResult(500)
             };
         }

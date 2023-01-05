@@ -5,7 +5,7 @@ namespace AccountsManager.DataModels.V1.Models
 {
     public sealed class TAccount : BaseEntity
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public AccountType AccountType { get; set; }
     }
 }
