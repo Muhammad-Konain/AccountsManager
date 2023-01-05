@@ -7,5 +7,6 @@ namespace AccountsManager.Application.V1.Contracts
         Task<VoucherReadDTO> CreateVoucher(VoucherCreateDTO voucherCreateDTO);
         Task<List<VoucherReadDTO>> GetAllVouchers();
         Task<VoucherReadDTO> GetVoucherById(Guid id);
+        Task<int> DeleteVoucher(Guid id);
     }
 }

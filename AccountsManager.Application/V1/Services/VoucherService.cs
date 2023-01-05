@@ -62,13 +62,16 @@ namespace AccountsManager.Application.V1.Services
         }
         public async Task<int> DeleteVoucher(Guid id)
         {
-            var account = await _unitOfWork.AccountRepository.GetById(id)
+            var voucher = await _unitOfWork.VoucherRepository.GetById(id)
                                                   .SingleOrDefaultAsync();
 
-            if (account == null)
-                throw new EntityNotFoundExcetption(id);
+            if (voucher == null)
+                throw new EntityNotFoundExcetption(id, nameof(voucher));
 
-            _unitOfWork.AccountRepository.Delete(account);
+            _unitOfWork.VoucherRepository.Delete(voucher);
+            
+            if(voucher.Transactions != null)
+                _unitOfWork.TransactionRepository.DeleteRange(voucher.Transactions);
 
             return await _unitOfWork.SaveChangesAsync();
         }

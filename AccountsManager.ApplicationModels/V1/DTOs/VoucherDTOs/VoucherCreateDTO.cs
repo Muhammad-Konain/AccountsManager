@@ -10,6 +10,7 @@ namespace AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs
 {
     public sealed class VoucherCreateDTO
     {
+        public string Description { get; set; } = string.Empty;
         public VoucherType VoucherType { get; set; }
         public List<TransactionCreateDTO> Transactions { get; set; } = new();
     }

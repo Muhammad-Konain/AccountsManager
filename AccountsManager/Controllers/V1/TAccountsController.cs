@@ -20,7 +20,7 @@ namespace AccountsManager.API.Controllers.V1
         public async Task<IActionResult> CreateTAccount(TAccountCreateDTO accountCreateDTO)
         {
             var created = await _accountService.CreateAccount(accountCreateDTO);
-            return CreatedAtRoute(nameof(GetByID), new { id = created.Id }, created);
+            return CreatedAtRoute(nameof(GetAccountById), new { id = created.Id }, created);
         }
 
         [HttpPut]
@@ -31,7 +31,7 @@ namespace AccountsManager.API.Controllers.V1
         }
 
         [HttpGet("{id}", Name= "GetAccountById")]
-        public async Task<IActionResult> GetByID(Guid id)
+        public async Task<IActionResult> GetAccountById(Guid id)
         {
             var account = await _accountService.GetAccountById(id); 
             return Ok(account);

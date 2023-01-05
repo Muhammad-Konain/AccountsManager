@@ -19,10 +19,10 @@ namespace AccountsManager.API.Controllers.V1
         public async Task<IActionResult> CreateTAccount(VoucherCreateDTO voucherCreateDTO)
         {
             var created = await _voucherService.CreateVoucher(voucherCreateDTO);
-            return CreatedAtRoute(nameof(GetByID), new { id = created.Id }, created);
+            return CreatedAtRoute(nameof(GetVoucherById), new { id = created.Id }, created);
         }
         [HttpGet("{id}", Name = "GetVoucherById")]
-        public async Task<IActionResult> GetByID(Guid id)
+        public async Task<IActionResult> GetVoucherById(Guid id)
         {
             var voucher = await _voucherService.GetVoucherById(id);
             return Ok(voucher);
@@ -33,6 +33,16 @@ namespace AccountsManager.API.Controllers.V1
         {
             var vouchers = await _voucherService.GetAllVouchers();
             return Ok(vouchers);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAccount(Guid id)
+        {
+            var deletedAccount = await _voucherService.DeleteVoucher(id);
+
+            if (deletedAccount >= 0)
+                return Ok();
+
+            return BadRequest();
         }
     }
 }
