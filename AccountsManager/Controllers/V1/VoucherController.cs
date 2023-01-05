@@ -12,14 +12,27 @@ namespace AccountsManager.API.Controllers.V1
 
         public VoucherController(IVoucherService voucherService)
         {
-            this._voucherService = voucherService;
+            _voucherService = voucherService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTAccount(VoucherCreateDTO voucherCreateDTO)
         {
-            var result = await _voucherService.CreateVoucher(voucherCreateDTO);
-            return Ok(result);
+            var created = await _voucherService.CreateVoucher(voucherCreateDTO);
+            return CreatedAtRoute(nameof(GetByID), new { id = created.Id }, created);
+        }
+        [HttpGet("{id}", Name = "GetVoucherById")]
+        public async Task<IActionResult> GetByID(Guid id)
+        {
+            var voucher = await _voucherService.GetVoucherById(id);
+            return Ok(voucher);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllVouchers()
+        {
+            var vouchers = await _voucherService.GetAllVouchers();
+            return Ok(vouchers);
         }
     }
 }

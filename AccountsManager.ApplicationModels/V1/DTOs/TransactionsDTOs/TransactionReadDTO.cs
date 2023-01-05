@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AccountsManager.ApplicationModels.V1.DTOs.TransactionsDTOs
 {
-    public sealed class TransactionDTO
+    public class TransactionReadDTO
     {
         public Guid AccountId { get; set; }
         public decimal Debt { get; set; } = decimal.Zero;

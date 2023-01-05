@@ -9,5 +9,6 @@ namespace AccountsManager.DataAccess.V1.Contracts
 {
     public interface ITAccountRepository : IBaseRepository<TAccount>
     {
+        IQueryable<TAccount> GetAccounts(List<Guid> accounts);
     }
 }

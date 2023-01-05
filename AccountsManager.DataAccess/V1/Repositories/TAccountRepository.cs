@@ -14,5 +14,9 @@ namespace AccountsManager.DataAccess.V1.Repositories
         public TAccountRepository(AppDBContext context) : base(context)
         {
         }
+        public IQueryable<TAccount> GetAccounts(List<Guid> accounts)
+        {
+            return Find(a => accounts.Contains(a.Id));
+        }
     }
 }

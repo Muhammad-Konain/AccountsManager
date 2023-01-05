@@ -21,7 +21,7 @@ namespace AccountsManager.Application.V1.Services
         public async Task<VoucherReadDTO> CreateVoucher(VoucherCreateDTO voucherCreateDTO)
         {
             var accounts = voucherCreateDTO.Transactions.Select(s => s.AccountId).ToList();
-            var accountsFound = await _unitOfWork.AccountRepository.Find(a => accounts.Contains(a.Id))
+            var accountsFound = await _unitOfWork.AccountRepository.GetAccounts(accounts)
                                                                    .Select(s => s.Id)
                                                                    .ToListAsync();
 
@@ -40,6 +40,37 @@ namespace AccountsManager.Application.V1.Services
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.MapEntity<Voucher, VoucherReadDTO>(voucher);
+        }
+        public async Task<List<VoucherReadDTO>> GetAllVouchers()
+        {
+            var vouchers = await _unitOfWork.VoucherRepository.GetAll()
+                                            .AsNoTrackingWithIdentityResolution()
+                                            .ToListAsync();
+
+            return _mapper.MapEntity<List<Voucher>, List<VoucherReadDTO>>(vouchers);
+        }
+        public async Task<VoucherReadDTO> GetVoucherById(Guid id)
+        {
+            var voucher = await _unitOfWork.VoucherRepository.GetById(id)
+                                     .AsNoTrackingWithIdentityResolution()
+                                     .FirstOrDefaultAsync();
+
+            if (voucher is null)
+                throw new EntityNotFoundExcetption(id, nameof(voucher));
+
+            return _mapper.MapEntity<Voucher, VoucherReadDTO>(voucher);
+        }
+        public async Task<int> DeleteVoucher(Guid id)
+        {
+            var account = await _unitOfWork.AccountRepository.GetById(id)
+                                                  .SingleOrDefaultAsync();
+
+            if (account == null)
+                throw new EntityNotFoundExcetption(id);
+
+            _unitOfWork.AccountRepository.Delete(account);
+
+            return await _unitOfWork.SaveChangesAsync();
         }
     }
 }

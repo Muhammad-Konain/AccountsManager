@@ -30,7 +30,7 @@ namespace AccountsManager.API.Controllers.V1
             return Ok(updated);
         }
 
-        [HttpGet("{id}", Name= "GetByID")]
+        [HttpGet("{id}", Name= "GetAccountById")]
         public async Task<IActionResult> GetByID(Guid id)
         {
             var account = await _accountService.GetAccountById(id); 

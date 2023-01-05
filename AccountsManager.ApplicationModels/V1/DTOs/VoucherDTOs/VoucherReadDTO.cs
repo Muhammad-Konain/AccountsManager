@@ -9,6 +9,6 @@ namespace AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         public VoucherType VoucherType { get; set; }
-        public List<TransactionDTO> Transactions { get; set; } = new();
+        public List<TransactionReadDTO> Transactions { get; set; } = new();
     }
 }
