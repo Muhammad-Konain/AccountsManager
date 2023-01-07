@@ -1,4 +1,4 @@
-﻿using AccountsManager.Application.V1.Contracts;
+﻿using AccountsManager.Application.V1.Contracts.ServiceContracts;
 using AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs;
 using Microsoft.AspNetCore.Mvc;
 

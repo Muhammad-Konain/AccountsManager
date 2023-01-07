@@ -1,4 +1,4 @@
-﻿using AccountsManager.Application.V1.Contracts;
+﻿using AccountsManager.Application.V1.Contracts.ServiceContracts;
 using AccountsManager.Application.V1.Services;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using Microsoft.AspNetCore.Mvc;

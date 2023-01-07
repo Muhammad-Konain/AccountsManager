@@ -1,6 +1,6 @@
 ﻿using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 
-namespace AccountsManager.Application.V1.Contracts
+namespace AccountsManager.Application.V1.Contracts.ServiceContracts
 {
     public interface ITAccountService
     {
