@@ -17,7 +17,6 @@ namespace AccountsManager.Test
         private readonly ITAccountService _accountService;
         private readonly Mock<IMappingExtension> _mapperMock = new();
         private readonly Mock<ITAccountRepository> _tAccountRepoMock = new();
-        private readonly Mock<ITransactionRepository> _transactionRepoMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
         public TAccountsTest()
@@ -72,6 +71,99 @@ namespace AccountsManager.Test
 
             /// Act and  Assert
             await Assert.ThrowsAsync<EntityNotFoundExcetption>(() => _accountService.GetAccountById(accountId));
+        }
+        [Fact]
+        public async Task DeleteAccount_ShouldThrowNotFoundException_WhenAccountDoesNotExist()
+        {
+            /// Arrange
+            var accountId = Guid.NewGuid();
+            _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
+
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(It.IsAny<Guid>()))
+                           .Returns(() => Enumerable.Empty<TAccount>().AsQueryable().BuildMock());
+
+            /// Act and  Assert
+            await Assert.ThrowsAsync<EntityNotFoundExcetption>(() => _accountService.DeleteAccount(accountId));
+        }
+        [Fact]
+        public async Task DeleteAccount_ShouldDeleteAccount_WhenAccountExists()
+        {
+            /// Arrange
+            var accountId = Guid.NewGuid();
+            var accountType = AccountType.Assets;
+            var accountTitle = "Cash";
+            var accountEntity = new TAccount
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var deletedAccount = new TAccount
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType,
+                IsActive = false
+            };
+            var entityResult = new List<TAccount> { accountEntity };
+
+            _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(accountId))
+                           .Returns(() => entityResult.AsQueryable().BuildMock());
+            _unitOfWorkMock.Setup(s => s.AccountRepository.Delete(accountEntity))
+                           .Returns(deletedAccount);
+            _unitOfWorkMock.Setup(s => s.SaveChangesAsync())
+                           .ReturnsAsync(1);
+
+            /// Act 
+            var result = await _accountService.DeleteAccount(accountId);
+
+            /// Assert
+            Assert.Equal(1, result);
+        }
+        [Fact]
+        public async Task CreateAccount_ShouldRetrunAccountReadDTO_WhenAccountIsCreated()
+        {
+            /// Arrange
+            var accountId = Guid.NewGuid();
+            var accountType = AccountType.Assets;
+            var accountTitle = "Cash";
+            var accountCreateDTO = new TAccountCreateDTO
+            {
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var account = new TAccount
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var accountReadDTO = new TAccountReadDTO
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+
+
+            _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
+            _mapperMock.Setup(s => s.MapEntity<TAccountCreateDTO, TAccount>(accountCreateDTO))
+                       .Returns(account);
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.CreateAsync(account))
+                           .ReturnsAsync(account);
+            _unitOfWorkMock.Setup(s => s.SaveChangesAsync())
+                           .ReturnsAsync(1);
+            _mapperMock.Setup(s => s.MapEntity<TAccount, TAccountReadDTO>(account))
+                       .Returns(accountReadDTO);
+
+            /// Act 
+            var createdAccount = await _accountService.CreateAccount(accountCreateDTO);
+
+            /// Assert
+            Assert.Equal(accountId, createdAccount.Id);
+            Assert.Equal(accountTitle, createdAccount.Title);
+            Assert.Equal(accountType, createdAccount.AccountType);
         }
     }
 }
