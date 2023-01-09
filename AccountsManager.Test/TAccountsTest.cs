@@ -47,7 +47,7 @@ namespace AccountsManager.Test
             };
 
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(accountId))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(accountId))
                            .Returns(() => entityResult.AsQueryable() .BuildMock());
             _mapperMock.Setup(s => s.MapEntity<TAccount, TAccountReadDTO>(accountEntity))
                        .Returns(accountReadDTO);
@@ -68,7 +68,7 @@ namespace AccountsManager.Test
             var accountId = Guid.NewGuid();
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
             
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(It.IsAny<Guid>()))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(It.IsAny<Guid>()))
                            .Returns(() => Enumerable.Empty<TAccount>().AsQueryable().BuildMock());
 
             /// Act and  Assert
@@ -81,7 +81,7 @@ namespace AccountsManager.Test
             var accountId = Guid.NewGuid();
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
 
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(It.IsAny<Guid>()))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(It.IsAny<Guid>()))
                            .Returns(() => Enumerable.Empty<TAccount>().AsQueryable().BuildMock());
 
             /// Act and  Assert
@@ -110,7 +110,7 @@ namespace AccountsManager.Test
             var entityResult = new List<TAccount> { accountEntity };
 
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(accountId))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(accountId))
                            .Returns(() => entityResult.AsQueryable().BuildMock());
             _unitOfWorkMock.Setup(s => s.AccountRepository.Delete(accountEntity))
                            .Returns(deletedAccount);
@@ -152,7 +152,7 @@ namespace AccountsManager.Test
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
             _mapperMock.Setup(s => s.MapEntity<TAccountCreateDTO, TAccount>(accountCreateDTO))
                        .Returns(account);
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.CreateAsync(account))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.CreateAsync(account))
                            .ReturnsAsync(account);
             _unitOfWorkMock.Setup(s => s.SaveChangesAsync())
                            .ReturnsAsync(1);
@@ -183,7 +183,7 @@ namespace AccountsManager.Test
             
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
 
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(It.IsAny<Guid>()))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(It.IsAny<Guid>()))
                            .Returns(() => Enumerable.Empty<TAccount>().AsQueryable().BuildMock());
 
             /// Act and Assert
@@ -219,11 +219,11 @@ namespace AccountsManager.Test
 
 
             _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(accountId))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetById(accountId))
                            .Returns(()=> entityResult.AsQueryable().BuildMock());
             _mapperMock.Setup(s => s.MapEntiyInto(accountUpdateDTO, account))
                        .Returns(account);
-            _unitOfWorkMock.Setup(fu => fu.AccountRepository.Update(account))
+            _unitOfWorkMock.Setup(s => s.AccountRepository.Update(account))
                            .Returns(account);
             _mapperMock.Setup(s => s.MapEntity<TAccount, TAccountReadDTO>(account))
                        .Returns(accountReadDTO);
