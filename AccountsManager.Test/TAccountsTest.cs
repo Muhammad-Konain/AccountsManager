@@ -7,8 +7,10 @@ using AccountsManager.Common.V1.Enums;
 using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
+using Microsoft.EntityFrameworkCore.Update;
 using MockQueryable.Moq;
 using Moq;
+using System.Security.Principal;
 
 namespace AccountsManager.Test
 {
@@ -164,6 +166,75 @@ namespace AccountsManager.Test
             Assert.Equal(accountId, createdAccount.Id);
             Assert.Equal(accountTitle, createdAccount.Title);
             Assert.Equal(accountType, createdAccount.AccountType);
+        }
+        [Fact]
+        public async Task UpdateTAccount_ShouldThrowNotFoundException_WhenAccountDoesNotExist()
+        {
+            /// Arraange
+            var accountId = Guid.NewGuid();
+            var accountType = AccountType.Assets;
+            var accountTitle = "Cash";
+            var accountUpdateDTO = new TAccountUpdateDTO
+            {
+                Id=accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            
+            _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
+
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(It.IsAny<Guid>()))
+                           .Returns(() => Enumerable.Empty<TAccount>().AsQueryable().BuildMock());
+
+            /// Act and Assert
+            await Assert.ThrowsAsync<EntityNotFoundExcetption>(() => _accountService.UpdateTAccount(accountUpdateDTO));
+
+        }
+        [Fact]
+        public async Task UpdateTAccount_ShouldUpdateAccountandReturnReadDTO_WhenAccountExists()
+        {
+            /// Arraange
+            var accountId = Guid.NewGuid();
+            var accountType = AccountType.Assets;
+            var accountTitle = "Cash";
+            var accountUpdateDTO = new TAccountUpdateDTO
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var account = new TAccount
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var accountReadDTO = new TAccountReadDTO
+            {
+                Id = accountId,
+                Title = accountTitle,
+                AccountType = accountType
+            };
+            var entityResult = new List<TAccount> { account };
+
+
+            _unitOfWorkMock.Setup(s => s.AccountRepository).Returns(_tAccountRepoMock.Object);
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.GetById(accountId))
+                           .Returns(()=> entityResult.AsQueryable().BuildMock());
+            _mapperMock.Setup(s => s.MapEntiyInto(accountUpdateDTO, account))
+                       .Returns(account);
+            _unitOfWorkMock.Setup(fu => fu.AccountRepository.Update(account))
+                           .Returns(account);
+            _mapperMock.Setup(s => s.MapEntity<TAccount, TAccountReadDTO>(account))
+                       .Returns(accountReadDTO);
+
+            /// Act
+            var result = await _accountService.UpdateTAccount(accountUpdateDTO);
+
+            /// Assert 
+            Assert.Equal(accountId, result.Id);
+            Assert.Equal(accountTitle, result.Title);
+            Assert.Equal(accountType, result.AccountType);
         }
     }
 }
