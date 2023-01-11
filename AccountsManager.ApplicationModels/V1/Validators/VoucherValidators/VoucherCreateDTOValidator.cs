@@ -19,6 +19,10 @@ namespace AccountsManager.ApplicationModels.V1.Validators.VoucherValidators
 
             RuleForEach(x => x.Transactions)
                 .SetValidator(new TransactionCreateValidator());
+
+            RuleFor(x => x.Transactions)
+                .Must(m => m.Count >= 2)
+                .WithMessage("Vocuher must contain atleast one transaction for credit and one for debt.");
         }
     }
 }
