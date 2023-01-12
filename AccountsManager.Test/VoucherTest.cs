@@ -4,10 +4,10 @@ using AccountsManager.Application.V1.Services;
 using AccountsManager.ApplicationModels.V1.DTOs.TransactionsDTOs;
 using AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
+using AccountsManager.Common.V1.Enums;
 using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MockQueryable.Moq;
 using Moq;
 
@@ -97,6 +97,80 @@ namespace AccountsManager.Test
 
             /// Act and Assert
             await Assert.ThrowsAsync<InvalidVoucherBalanceException>(() => _sut.CreateVoucher(voucherCreateRequest));
+        }
+        [Fact]
+        public async Task CreateVoucher_ShouldCreateVoucher_WhenVoucherAllValidationsPass()
+        {
+            /// Arrange
+            var description = "any string";
+            var voucherId = Guid.NewGuid();
+            var creditAccountId = Guid.NewGuid();
+            var debtAccountId = Guid.NewGuid();
+            decimal creditAmount, debtAmount;
+            creditAmount = debtAmount = 1000;
+            var voucherType = VoucherType.JournalVoucher;
+
+            var transaction = new List<TransactionCreateDTO>
+            {
+                new TransactionCreateDTO() { AccountId = creditAccountId, Credit= creditAmount },
+                new TransactionCreateDTO() { AccountId = debtAccountId, Debt = debtAmount }
+            };
+            var voucherCreateRequest = new VoucherCreateDTO
+            {
+                Description = description,
+                Transactions = transaction
+            };
+            var accountIds = new List<Guid>() { creditAccountId, debtAccountId };
+            var accountsFromDB = new List<TAccount>
+            {
+                new TAccount() { Id = creditAccountId },
+                new TAccount() { Id = debtAccountId }
+            };
+            var voucher = new Voucher
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                Transactions = new List<Transaction>
+                {
+                    new Transaction { AccountId = debtAccountId, Debt = debtAmount},
+                    new Transaction { AccountId = creditAccountId, Credit = creditAmount}
+                }
+            };
+            var voucherReadDTO = new VoucherReadDTO
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                Transactions = new List<TransactionReadDTO>
+                {
+                    new TransactionReadDTO{ AccountId = creditAccountId, Credit = creditAmount },
+                    new TransactionReadDTO{ AccountId = debtAccountId, Credit = debtAmount },
+                }
+            };
+
+            _unitOfWorkMock.Setup(s => s.TransactionRepository)
+                           .Returns(_transactionRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.AccountRepository)
+                           .Returns(_tAccountRepoMock.Object);
+
+            _unitOfWorkMock.Setup(s => s.AccountRepository.GetAccounts(accountIds))
+                           .Returns(() => accountsFromDB.AsQueryable().BuildMock());
+            _mapperMock.Setup(s => s.MapEntity<VoucherCreateDTO, Voucher>(voucherCreateRequest))
+                       .Returns(voucher);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.CreateAsync(voucher))
+                           .ReturnsAsync(voucher);
+            _unitOfWorkMock.Setup(s => s.SaveChangesAsync())
+                           .ReturnsAsync(1);
+            _mapperMock.Setup(s => s.MapEntity<Voucher, VoucherReadDTO>(voucher))
+                      .Returns(voucherReadDTO);
+
+
+            /// Act 
+            var result = await _sut.CreateVoucher(voucherCreateRequest);
+
+            /// Assert
+            Assert.Equal(voucherId, result.Id);
+            Assert.Equal(voucherType, result.VoucherType);
+            Assert.Equal(voucher.Transactions.Count, result.Transactions.Count);
         }
     }
 }
