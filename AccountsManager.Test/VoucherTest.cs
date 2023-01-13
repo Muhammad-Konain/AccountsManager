@@ -151,6 +151,8 @@ namespace AccountsManager.Test
                            .Returns(_transactionRepoMock.Object);
             _unitOfWorkMock.Setup(s => s.AccountRepository)
                            .Returns(_tAccountRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository)
+                           .Returns(_voucherRepoMock.Object);
 
             _unitOfWorkMock.Setup(s => s.AccountRepository.GetAccounts(accountIds))
                            .Returns(() => accountsFromDB.AsQueryable().BuildMock());
@@ -171,6 +173,133 @@ namespace AccountsManager.Test
             Assert.Equal(voucherId, result.Id);
             Assert.Equal(voucherType, result.VoucherType);
             Assert.Equal(voucher.Transactions.Count, result.Transactions.Count);
+        }
+        [Fact]
+        public async Task GetVoucherById_ShouldThroNotFoundExcetpion_IfVoucherDoesNotExist()
+        {
+            /// Arrange
+            var voucherId = Guid.NewGuid();
+            var emptyVouchers = new List<Voucher>();
+            _unitOfWorkMock.Setup(s => s.VoucherRepository)
+                           .Returns(_voucherRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.GetById(It.IsAny<Guid>()))
+                           .Returns(() => emptyVouchers.AsQueryable().BuildMock());
+
+            /// Act and Assert
+            await Assert.ThrowsAsync<EntityNotFoundExcetption>(() => _sut.GetVoucherById(voucherId));
+        }
+        [Fact]
+        public async Task GetVoucherById_ShouldReturnVoucher_IfVoucherExists()
+        {
+            /// Arrange
+            var voucherId = Guid.NewGuid();
+            var creditAccountId = Guid.NewGuid();
+            var debtAccountId = Guid.NewGuid();
+            var voucherType = VoucherType.JournalVoucher;
+            
+            var voucher = new  Voucher
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                Transactions = new List<Transaction>
+                {
+                    new Transaction { AccountId = debtAccountId },
+                    new Transaction { AccountId = creditAccountId }
+                }
+            };
+            var voucherFromDB = new List<Voucher> { voucher };
+
+            var voucherReadDTO = new VoucherReadDTO
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                Transactions = new List<TransactionReadDTO>
+                {
+                    new TransactionReadDTO { AccountId = creditAccountId },
+                    new TransactionReadDTO { AccountId = debtAccountId },
+                }
+            };
+
+            _unitOfWorkMock.Setup(s => s.VoucherRepository)
+                           .Returns(_voucherRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.GetById(voucherId))
+                           .Returns(() => voucherFromDB.AsQueryable().BuildMock());
+            _mapperMock.Setup(s => s.MapEntity<Voucher, VoucherReadDTO>(voucher))
+                    .Returns(voucherReadDTO);
+
+            /// Act
+            var result = await _sut.GetVoucherById(voucherId);
+
+            /// Assert
+            Assert.Equal(voucherId, result.Id);
+            Assert.Equal(voucherType, result.VoucherType);
+            Assert.Equal(voucher.Transactions.Count, result.Transactions.Count);
+        }
+        [Fact]
+        public async Task DeleteVoucher_ShouldThrowNotFoundException_WhenVoucherDoesNotExist()
+        {
+            /// Arrange
+            var voucherId = Guid.NewGuid();
+            var emptyVouchers = new List<Voucher>();
+            _unitOfWorkMock.Setup(s => s.VoucherRepository)
+                           .Returns(_voucherRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.GetById(It.IsAny<Guid>()))
+                           .Returns(() => emptyVouchers.AsQueryable().BuildMock());
+
+            /// Act and Assert
+            await Assert.ThrowsAsync<EntityNotFoundExcetption>(() => _sut.GetVoucherById(voucherId));
+        }
+        [Fact]
+        public async Task DeleteVoucher_ShouldDeleteVoucher_WhenVoucherExists()
+        {
+            /// Arrange
+            var voucherId = Guid.NewGuid();
+            var creditAccountId = Guid.NewGuid();
+            var debtAccountId = Guid.NewGuid();
+            var voucherType = VoucherType.JournalVoucher;
+
+            var voucher = new Voucher
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                Transactions = new List<Transaction>
+                {
+                    new Transaction { AccountId = debtAccountId },
+                    new Transaction { AccountId = creditAccountId }
+                }
+            };
+            var voucherFromDB = new List<Voucher> { voucher };
+            var deletedVoucher = new Voucher
+            {
+                Id = voucherId,
+                VoucherType = voucherType,
+                IsActive = false,
+                Transactions = new List<Transaction>
+                {
+                    new Transaction { AccountId = debtAccountId, IsActive = false },
+                    new Transaction { AccountId = creditAccountId, IsActive =false }
+                }
+            };
+
+            _unitOfWorkMock.Setup(s => s.VoucherRepository)
+                           .Returns(_voucherRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.TransactionRepository)
+                           .Returns(_transactionRepoMock.Object);
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.GetById(voucherId))
+                           .Returns(() => voucherFromDB.AsQueryable().BuildMock());
+            _unitOfWorkMock.Setup(s => s.VoucherRepository.Delete(voucher))
+                           .Returns(deletedVoucher);
+            _unitOfWorkMock.Setup(s => s.TransactionRepository.DeleteRange(voucher.Transactions.ToList()))
+                           .Returns(deletedVoucher.Transactions.ToList());
+            _unitOfWorkMock.Setup(s => s.SaveChangesAsync())
+                           .ReturnsAsync(1);
+
+
+            /// Act
+            var result = await _sut.DeleteVoucher(voucherId);
+
+            /// Assert 
+            Assert.Equal(1, result);
         }
     }
 }
