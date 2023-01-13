@@ -1,4 +1,5 @@
-﻿using AccountsManager.Application.V1.Contracts;
+﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
+using AccountsManager.Application.V1.Contracts.ServiceContracts;
 using AccountsManager.Application.V1.Helpers;
 using AccountsManager.Application.V1.Profiles;
 using AccountsManager.Application.V1.Services;
@@ -21,7 +22,7 @@ namespace AccountsManager.Application.V1.Registery
             services.AddAutoMapper(config => {
                 config.AddProfile(new AutoMapperProfiles());
             });
-            services.AddScoped<MappingHelper>();
+            services.AddScoped<IMappingExtension, MappingHelper >();
             services.AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<TAccountCreateDTOValidator>());
                
             return services;

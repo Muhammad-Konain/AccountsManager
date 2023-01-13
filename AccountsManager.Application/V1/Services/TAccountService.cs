@@ -1,5 +1,5 @@
-﻿using AccountsManager.Application.V1.Contracts;
-using AccountsManager.Application.V1.Helpers;
+﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
+using AccountsManager.Application.V1.Contracts.ServiceContracts;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
 using AccountsManager.DataAccess.V1.Core;
@@ -10,10 +10,10 @@ namespace AccountsManager.Application.V1.Services
 {
     public sealed class TAccountService : ITAccountService
     {
-        private MappingHelper _mapper;
+        private IMappingExtension _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public TAccountService(MappingHelper mapper, IUnitOfWork unitOfWork)
+        public TAccountService(IMappingExtension mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

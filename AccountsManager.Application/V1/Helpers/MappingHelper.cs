@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
+using AutoMapper;
 
 namespace AccountsManager.Application.V1.Helpers
 {
-    public sealed class MappingHelper
+    public sealed class MappingHelper : IMappingExtension
     {
         private IMapper _mapper;
 

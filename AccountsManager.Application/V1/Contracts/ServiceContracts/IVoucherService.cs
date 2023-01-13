@@ -1,6 +1,6 @@
 ﻿using AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs;
 
-namespace AccountsManager.Application.V1.Contracts
+namespace AccountsManager.Application.V1.Contracts.ServiceContracts
 {
     public interface IVoucherService
     {
