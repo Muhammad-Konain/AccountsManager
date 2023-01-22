@@ -2,9 +2,11 @@
 using AccountsManager.Application.V1.Contracts.ServiceContracts;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
+using AccountsManager.Common.V1.Constants;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace AccountsManager.Application.V1.Services
 {
@@ -45,11 +47,12 @@ namespace AccountsManager.Application.V1.Services
 
         public async Task<IEnumerable<TAccountReadDTO>> GetAllAccounts()
         {
-            var accoutns = await _unitOfWork.AccountRepository.GetAll()
+            var accounts = await _unitOfWork.AccountRepository.GetAll()
+                                                   .Take(Constants.DefaultPageSize)
                                                    .AsNoTrackingWithIdentityResolution()
                                                    .ToListAsync();
 
-            return _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accoutns);
+            return _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accounts);
         }
         public async Task<TAccountReadDTO> GetAccountById(Guid id)
         {
