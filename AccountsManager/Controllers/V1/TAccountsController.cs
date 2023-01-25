@@ -41,6 +41,8 @@ namespace AccountsManager.API.Controllers.V1
         public async Task<IActionResult> GetAllAccounts()
         {
             var accounts = await _accountService.GetAllAccounts();
+            await _accountService.GetAllAccounts(1, 10);
+
             return Ok(accounts);
         }
 
