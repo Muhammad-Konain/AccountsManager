@@ -10,6 +10,6 @@ namespace AccountsManager.Application.V1.Contracts.ServiceContracts
         Task<IEnumerable<TAccountReadDTO>> GetAllAccounts();
         Task<TAccountReadDTO> GetAccountById(Guid id);
         Task<int> DeleteAccount(Guid id);
-        Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize);
+        Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize = 0);
     }
 }
