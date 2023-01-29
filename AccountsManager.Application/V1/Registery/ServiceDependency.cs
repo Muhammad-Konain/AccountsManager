@@ -23,6 +23,7 @@ namespace AccountsManager.Application.V1.Registery
                 config.AddProfile(new AutoMapperProfiles());
             });
             services.AddScoped<IMappingExtension, MappingHelper >();
+            services.AddScoped<IConfigReader, ConfigReader>();
             services.AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<TAccountCreateDTOValidator>());
                
             return services;

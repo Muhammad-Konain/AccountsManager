@@ -27,11 +27,10 @@ namespace AccountsManager.API.Controllers.V1
             var voucher = await _voucherService.GetVoucherById(id);
             return Ok(voucher);
         }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllVouchers()
+        public async Task<IActionResult> GetAllVouchers(int pageNumber, int pageSize = 0)
         {
-            var vouchers = await _voucherService.GetAllVouchers();
+            var vouchers = await _voucherService.GetAllVouchers(pageNumber, pageSize);
             return Ok(vouchers);
         }
         [HttpDelete("{id}")]

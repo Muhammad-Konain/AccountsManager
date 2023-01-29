@@ -1,7 +1,9 @@
 ﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
 using AccountsManager.Application.V1.Contracts.ServiceContracts;
+using AccountsManager.ApplicationModels.V1.DTOs.PaginatedResponse;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
+using AccountsManager.Common.V1.Constants;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +12,15 @@ namespace AccountsManager.Application.V1.Services
 {
     public sealed class TAccountService : ITAccountService
     {
-        private IMappingExtension _mapper;
+        private readonly IMappingExtension _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfigReader _configReader;
 
-        public TAccountService(IMappingExtension mapper, IUnitOfWork unitOfWork)
+        public TAccountService(IMappingExtension mapper, IUnitOfWork unitOfWork, IConfigReader configReader)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _configReader = configReader;
         }
         public async Task<TAccountReadDTO> CreateAccount(TAccountCreateDTO accountCreateDTO)
         {
@@ -26,7 +30,6 @@ namespace AccountsManager.Application.V1.Services
             
             return _mapper.MapEntity<TAccount, TAccountReadDTO>(accountModel);
         }
-
         public async Task<TAccountReadDTO> UpdateTAccount(TAccountUpdateDTO accountUpdateDTO)
         {
             var accountInDB =await _unitOfWork.AccountRepository.GetById(accountUpdateDTO.Id)
@@ -42,14 +45,13 @@ namespace AccountsManager.Application.V1.Services
 
             return _mapper.MapEntity<TAccount, TAccountReadDTO>(accountInDB);
         }
-
         public async Task<IEnumerable<TAccountReadDTO>> GetAllAccounts()
         {
-            var accoutns = await _unitOfWork.AccountRepository.GetAll()
+            var accounts = await _unitOfWork.AccountRepository.GetAll()
                                                    .AsNoTrackingWithIdentityResolution()
                                                    .ToListAsync();
 
-            return _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accoutns);
+            return _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accounts);
         }
         public async Task<TAccountReadDTO> GetAccountById(Guid id)
         {
@@ -72,6 +74,24 @@ namespace AccountsManager.Application.V1.Services
             _unitOfWork.AccountRepository.Delete(account);
 
             return await _unitOfWork.SaveChangesAsync();
+        }
+        public async Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize = 0)
+        {
+            if(pageSize == 0)
+                pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);
+
+            var accounts = await _unitOfWork.AccountRepository.GetAccounts(pageNumber, pageSize).ToListAsync();
+            var totalAccounts = await _unitOfWork.AccountRepository.GetAll().CountAsync();
+
+            var resultSet = _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accounts);
+
+            return new PaginatedResponse<TAccountReadDTO>
+            {
+                Data = resultSet,
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                TotalEntities = totalAccounts,
+            };
         }
     }
 }

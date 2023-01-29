@@ -1,11 +1,6 @@
 ﻿using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataModels.V1.Data;
 using AccountsManager.DataModels.V1.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountsManager.DataAccess.V1.Repositories
 {
@@ -17,6 +12,15 @@ namespace AccountsManager.DataAccess.V1.Repositories
         public IQueryable<TAccount> GetAccounts(List<Guid> accounts)
         {
             return Find(a => accounts.Contains(a.Id));
+        }
+        public IQueryable<TAccount> GetAccounts(int pageNumber, int pageSize)
+        {
+            var pageState = GetAll().OrderBy(o => o.AccountType);
+
+            if (pageNumber > 1)
+                return pageState.Skip(pageSize * pageNumber).Take(pageSize);
+
+            return pageState.Take(pageSize);
         }
     }
 }
