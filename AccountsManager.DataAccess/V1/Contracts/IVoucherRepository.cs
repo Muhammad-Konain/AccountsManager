@@ -9,5 +9,6 @@ namespace AccountsManager.DataAccess.V1.Contracts
 {
     public interface IVoucherRepository : IBaseRepository<Voucher>
     {
+        IQueryable<Voucher> GetVouchers(int pageNumber, int pageSize);
     }
 }

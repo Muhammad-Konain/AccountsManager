@@ -1,7 +1,9 @@
 ﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
 using AccountsManager.Application.V1.Contracts.ServiceContracts;
+using AccountsManager.ApplicationModels.V1.DTOs.PaginatedResponse;
 using AccountsManager.ApplicationModels.V1.DTOs.VoucherDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
+using AccountsManager.Common.V1.Constants;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +12,14 @@ namespace AccountsManager.Application.V1.Services
 {
     public sealed class VoucherService : IVoucherService
     {
-        private IMappingExtension _mapper;
+        private readonly IMappingExtension _mapper;
         private readonly IUnitOfWork _unitOfWork;
-
-        public VoucherService(IMappingExtension mapper, IUnitOfWork unitOfWork)
+        private readonly IConfigReader _configReader;
+        public VoucherService(IMappingExtension mapper, IUnitOfWork unitOfWork, IConfigReader configReader)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _configReader = configReader;
         }
         public async Task<VoucherReadDTO> CreateVoucher(VoucherCreateDTO voucherCreateDTO)
         {
@@ -74,6 +77,24 @@ namespace AccountsManager.Application.V1.Services
                 _unitOfWork.TransactionRepository.DeleteRange(voucher.Transactions);
 
             return await _unitOfWork.SaveChangesAsync();
+        }
+        public async Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = 0)
+        {
+            if(pageSize == 0)
+                pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);
+
+            var vouchers = await _unitOfWork.VoucherRepository.GetVouchers(pageNumber, pageSize).ToListAsync();
+            var totalVouchers = await _unitOfWork.VoucherRepository.GetAll().CountAsync();
+
+            var resultSet = _mapper.MapEntity<List<Voucher>, List<VoucherReadDTO>>(vouchers);
+
+            return new PaginatedResponse<VoucherReadDTO>
+            {
+                Data = resultSet,
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                TotalEntities = totalVouchers,
+            };
         }
     }
 }

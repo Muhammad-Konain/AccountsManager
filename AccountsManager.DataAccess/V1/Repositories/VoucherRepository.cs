@@ -21,5 +21,16 @@ namespace AccountsManager.DataAccess.V1.Repositories
             return base.GetById(entityID)
                        .Include(i => i.Transactions);
         }
+        public IQueryable<Voucher> GetVouchers(int pageNumber, int pageSize)
+        {
+            var pageState = base.GetAll()
+                            .Include(i => i.Transactions)
+                            .OrderByDescending(o => o.CreatedOn);
+
+            if (pageNumber > 1)
+                return pageState.Skip(pageSize * pageNumber).Take(pageSize);
+
+            return pageState.Take(pageSize);
+        }
     }
 }
