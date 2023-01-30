@@ -20,10 +20,11 @@ namespace AccountsManager.Test
         private readonly Mock<IMappingExtension> _mapperMock = new();
         private readonly Mock<ITAccountRepository> _tAccountRepoMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+        private readonly Mock<IConfigReader> _configReaderMock = new();
 
         public TAccountsTest()
         {
-            _accountService = new TAccountService(_mapperMock.Object, _unitOfWorkMock.Object);
+            _accountService = new TAccountService(_mapperMock.Object, _unitOfWorkMock.Object, _configReaderMock.Object);
         }
         [Fact]
         public async Task GetAccountById_ShouldReturnAccount_WhenAccountWithIdIsPresent()
