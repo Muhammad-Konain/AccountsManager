@@ -21,10 +21,11 @@ namespace AccountsManager.Test
         private readonly Mock<ITransactionRepository> _transactionRepoMock = new();
         private readonly Mock<ITAccountRepository> _tAccountRepoMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+        private readonly Mock<IConfigReader> _configReaderMock = new();
 
         public VoucherTest()
         {
-            _sut = new VoucherService(_mapperMock.Object, _unitOfWorkMock.Object);
+            _sut = new VoucherService(_mapperMock.Object, _unitOfWorkMock.Object, _configReaderMock.Object);
         }
         [Fact]
         public async Task CreateVoucher_ShouldThrowNotFoundException_WhenAnyAccountInTransacionsNotFound()
