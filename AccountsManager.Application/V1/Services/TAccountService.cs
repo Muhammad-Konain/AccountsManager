@@ -75,9 +75,12 @@ namespace AccountsManager.Application.V1.Services
 
             return await _unitOfWork.SaveChangesAsync();
         }
-        public async Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize = 0)
+        public async Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize = default)
         {
-            if(pageSize == 0)
+            if (pageNumber < 0)
+                throw new ArgumentException($"Invalid page number: {pageNumber}");
+
+            if (pageSize == default)
                 pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);
 
             var accounts = await _unitOfWork.AccountRepository.GetAccounts(pageNumber, pageSize).ToListAsync();

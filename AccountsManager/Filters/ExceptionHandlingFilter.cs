@@ -18,6 +18,7 @@ namespace AccountsManager.API.Filters
             {
                 EntityNotFoundExcetption => new NotFoundObjectResult(exceptionResult),
                 InvalidVoucherBalanceException => new BadRequestObjectResult(exceptionResult),
+                ArgumentException=> new BadRequestObjectResult(exceptionResult),
                 _ => new StatusCodeResult(500)
             };
         }

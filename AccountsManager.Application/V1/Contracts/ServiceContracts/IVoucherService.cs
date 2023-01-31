@@ -9,6 +9,6 @@ namespace AccountsManager.Application.V1.Contracts.ServiceContracts
         Task<List<VoucherReadDTO>> GetAllVouchers();
         Task<VoucherReadDTO> GetVoucherById(Guid id);
         Task<int> DeleteVoucher(Guid id);
-        Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = 0);
+        Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = default);
     }
 }

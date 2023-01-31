@@ -78,9 +78,12 @@ namespace AccountsManager.Application.V1.Services
 
             return await _unitOfWork.SaveChangesAsync();
         }
-        public async Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = 0)
+        public async Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = default)
         {
-            if(pageSize == 0)
+            if(pageNumber < 0)
+                throw new ArgumentException($"Invalid page number: {pageNumber}");
+
+            if(pageSize == default)
                 pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);
 
             var vouchers = await _unitOfWork.VoucherRepository.GetVouchers(pageNumber, pageSize).ToListAsync();
