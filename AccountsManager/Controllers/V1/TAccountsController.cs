@@ -38,9 +38,9 @@ namespace AccountsManager.API.Controllers.V1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAccounts(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllAccounts()
         {
-            var accounts = await _accountService.GetAllAccounts(pageNumber, pageSize);
+            var accounts = await _accountService.GetAllAccounts();
             return Ok(accounts);
         }
 

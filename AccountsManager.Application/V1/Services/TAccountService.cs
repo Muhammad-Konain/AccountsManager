@@ -75,26 +75,5 @@ namespace AccountsManager.Application.V1.Services
 
             return await _unitOfWork.SaveChangesAsync();
         }
-        public async Task<PaginatedResponse<TAccountReadDTO>> GetAllAccounts(int pageNumber, int pageSize = default)
-        {
-            if (pageNumber < 0)
-                throw new ArgumentException($"Invalid page number: {pageNumber}");
-
-            if (pageSize == default)
-                pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);
-
-            var accounts = await _unitOfWork.AccountRepository.GetAccounts(pageNumber, pageSize).ToListAsync();
-            var totalAccounts = await _unitOfWork.AccountRepository.GetAll().CountAsync();
-
-            var resultSet = _mapper.MapEntity<List<TAccount>, List<TAccountReadDTO>>(accounts);
-
-            return new PaginatedResponse<TAccountReadDTO>
-            {
-                Data = resultSet,
-                PageSize = pageSize,
-                PageNumber = pageNumber,
-                TotalEntities = totalAccounts,
-            };
-        }
     }
 }
