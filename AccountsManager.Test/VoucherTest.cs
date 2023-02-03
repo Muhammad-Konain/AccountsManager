@@ -8,6 +8,7 @@ using AccountsManager.Common.V1.Enums;
 using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
+using Microsoft.AspNetCore.Components;
 using MockQueryable.Moq;
 using Moq;
 
@@ -301,6 +302,27 @@ namespace AccountsManager.Test
 
             /// Assert 
             Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public async Task GetAllVouchers_ShouldArgumentExcception_WhenNegativePageNumberIsRequestedAndPageSizeIsNotSent()
+        {
+            /// Arrange
+            var pageNumber = -1;
+
+            /// Act and  Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetAllVouchers(pageNumber));
+        }
+
+        [Fact]
+        public async Task GetAllVouchers_ShouldArgumentExcception_WhenPageSizeIsNegativet()
+        {
+            /// Arrange
+            var pageNumber = 1;
+            var pageSize = -17;
+
+            /// Act and  Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetAllVouchers(pageNumber, pageSize));
         }
     }
 }

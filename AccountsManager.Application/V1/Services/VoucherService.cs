@@ -80,8 +80,11 @@ namespace AccountsManager.Application.V1.Services
         }
         public async Task<PaginatedResponse<VoucherReadDTO>> GetAllVouchers(int pageNumber, int pageSize = default)
         {
-            if(pageNumber < 0)
+            if(pageNumber <= 0)
                 throw new ArgumentException($"Invalid page number: {pageNumber}");
+
+            if (pageSize <= 0)
+                throw new ArgumentException($"Invalid page size: {pageSize}");
 
             if(pageSize == default)
                 pageSize = _configReader.GetSectionValue<int>(Constants.DefaultPageSize);

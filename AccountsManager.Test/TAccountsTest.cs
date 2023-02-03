@@ -7,10 +7,8 @@ using AccountsManager.Common.V1.Enums;
 using AccountsManager.DataAccess.V1.Contracts;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
-using Microsoft.EntityFrameworkCore.Update;
 using MockQueryable.Moq;
 using Moq;
-using System.Security.Principal;
 
 namespace AccountsManager.Test
 {
@@ -20,11 +18,10 @@ namespace AccountsManager.Test
         private readonly Mock<IMappingExtension> _mapperMock = new();
         private readonly Mock<ITAccountRepository> _tAccountRepoMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<IConfigReader> _configReaderMock = new();
-
+        
         public TAccountsTest()
         {
-            _accountService = new TAccountService(_mapperMock.Object, _unitOfWorkMock.Object, _configReaderMock.Object);
+            _accountService = new TAccountService(_mapperMock.Object, _unitOfWorkMock.Object);
         }
         [Fact]
         public async Task GetAccountById_ShouldReturnAccount_WhenAccountWithIdIsPresent()

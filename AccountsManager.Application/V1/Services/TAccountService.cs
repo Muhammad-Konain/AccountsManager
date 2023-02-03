@@ -1,9 +1,7 @@
 ﻿using AccountsManager.Application.V1.Contracts.HelperContracts;
 using AccountsManager.Application.V1.Contracts.ServiceContracts;
-using AccountsManager.ApplicationModels.V1.DTOs.PaginatedResponse;
 using AccountsManager.ApplicationModels.V1.DTOs.TAccountDTOs;
 using AccountsManager.ApplicationModels.V1.Exceptions;
-using AccountsManager.Common.V1.Constants;
 using AccountsManager.DataAccess.V1.Core;
 using AccountsManager.DataModels.V1.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +12,11 @@ namespace AccountsManager.Application.V1.Services
     {
         private readonly IMappingExtension _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfigReader _configReader;
-
-        public TAccountService(IMappingExtension mapper, IUnitOfWork unitOfWork, IConfigReader configReader)
+        
+        public TAccountService(IMappingExtension mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _configReader = configReader;
         }
         public async Task<TAccountReadDTO> CreateAccount(TAccountCreateDTO accountCreateDTO)
         {
